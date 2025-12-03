@@ -1,24 +1,22 @@
-
-import { User } from '../models/User';
-import { CreateUserDTO, UpdateUserDTO } from '../types/UserTypes';
+import { CreateUserDTO, UpdateUserDTO, UserAttributes } from '../types/UserTypes';
 import { authService } from './authService';
 import { logTrace, logException } from '../utils/appInsights';
 import { userRepository } from '../repository/userRepository';
 
 export class UserService {
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers(): Promise<UserAttributes[]> {
     try {
       logTrace('UserService: Fetching all users');
       const users = await userRepository.findAll();
       logTrace(`UserService: Retrieved ${users.length} users`);
-      return users as User[];
+      return users;
     } catch (error) {
       logException(error as Error, { context: 'userService.getAllUsers' });
       throw error;
     }
   }
 
-  async getUserById(id: string): Promise<User | null> {
+  async getUserById(id: string): Promise<UserAttributes | null> {
     try {
       logTrace('UserService: Fetching user by ID');
       const user = await userRepository.findById(id);
@@ -27,28 +25,28 @@ export class UserService {
         return null;
       }
       logTrace('UserService: User retrieved');
-      return user as User;
+      return user;
     } catch (error) {
       logException(error as Error, { context: 'userService.getUserById' });
       throw error;
     }
   }
 
-  async createUser(userData: CreateUserDTO): Promise<User> {
+  async createUser(userData: CreateUserDTO): Promise<UserAttributes> {
     try {
       logTrace('UserService: Creating new user');
       const { email, password, name, role } = userData;
       const hashedPassword = await authService.hashPassword(password);
       const user = await userRepository.create({ email, password: hashedPassword, name, role });
       logTrace('UserService: User created successfully');
-      return user as User;
+      return user;
     } catch (error) {
       logException(error as Error, { context: 'userService.createUser' });
       throw error;
     }
   }
 
-  async updateUser(id: string, updates: UpdateUserDTO): Promise<User | null> {
+  async updateUser(id: string, updates: UpdateUserDTO): Promise<UserAttributes | null> {
     try {
       logTrace('UserService: Updating user');
       const updateData = { ...updates };
@@ -62,7 +60,7 @@ export class UserService {
         return null;
       }
       logTrace('UserService: User updated successfully');
-      return updatedUser as User;
+      return updatedUser;
     } catch (error) {
       logException(error as Error, { context: 'userService.updateUser' });
       throw error;
@@ -72,8 +70,8 @@ export class UserService {
   async deleteUser(id: string): Promise<boolean> {
     try {
       logTrace('UserService: Deleting user');
-      const deleted = await userRepository.delete(id);
-      const success = deleted > 0;
+      await userRepository.delete(id);
+      const success = true;
       logTrace(`UserService: User deletion ${success ? 'successful' : 'failed'}`);
       return success;
     } catch (error) {

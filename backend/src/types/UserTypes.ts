@@ -21,6 +21,3 @@ export interface UserAttributes {
   created_at?: Date;
   updated_at?: Date;
 }
-
-import { Optional } from 'sequelize';
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'created_at' | 'updated_at'> {}

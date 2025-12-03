@@ -1,6 +1,6 @@
 import { VALIDATION_MESSAGES } from '../constants/messages';
-import { CreateUseCaseDTO, UpdateUseCaseDTO } from '../models/UseCase';
-import { CreateUserDTO, UpdateUserDTO } from '../models/User';
+import { CreateUseCaseDTO, UpdateUseCaseDTO } from '../types/UseCaseTypes';
+import { CreateUserDTO, UpdateUserDTO } from '../types/UserTypes';
 
 const VALID_STATUSES = ['Ideation', 'Pre-Evaluation', 'Evaluation', 'PoC', 'MVP', 'Live', 'Archived'];
 const VALID_DEPARTMENTS = ['Marketing', 'R&D', 'Procurement', 'IT', 'HR', 'Operations'];

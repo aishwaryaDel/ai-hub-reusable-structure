@@ -1,22 +1,21 @@
-import { UseCase } from '../models/UseCase';
-import { CreateUseCaseDTO, UpdateUseCaseDTO } from '../types/UseCaseTypes';
+import { CreateUseCaseDTO, UpdateUseCaseDTO, UseCaseAttributes } from '../types/UseCaseTypes';
 import { logTrace, logException } from '../utils/appInsights';
 import { useCaseRepository } from '../repository/useCaseRepository';
 
 export class UseCaseService {
-  async getAllUseCases(): Promise<UseCase[]> {
+  async getAllUseCases(): Promise<UseCaseAttributes[]> {
     try {
       logTrace('UseCaseService: Fetching all use cases');
       const useCases = await useCaseRepository.findAll();
       logTrace(`UseCaseService: Retrieved ${useCases.length} use cases`);
-      return useCases as UseCase[];
+      return useCases;
     } catch (error) {
       logException(error as Error, { context: 'useCaseService.getAllUseCases' });
       throw error;
     }
   }
 
-  async getUseCaseById(id: string): Promise<UseCase | null> {
+  async getUseCaseById(id: string): Promise<UseCaseAttributes | null> {
     try {
       logTrace('UseCaseService: Fetching use case by ID');
       const useCase = await useCaseRepository.findById(id);
@@ -25,26 +24,26 @@ export class UseCaseService {
         return null;
       }
       logTrace('UseCaseService: Use case retrieved');
-      return useCase as UseCase;
+      return useCase;
     } catch (error) {
       logException(error as Error, { context: 'useCaseService.getUseCaseById' });
       throw error;
     }
   }
 
-  async createUseCase(useCaseData: CreateUseCaseDTO): Promise<UseCase> {
+  async createUseCase(useCaseData: CreateUseCaseDTO): Promise<UseCaseAttributes> {
     try {
       logTrace('UseCaseService: Creating new use case');
       const useCase = await useCaseRepository.create(useCaseData);
       logTrace('UseCaseService: Use case created successfully');
-      return useCase as UseCase;
+      return useCase;
     } catch (error) {
       logException(error as Error, { context: 'useCaseService.createUseCase' });
       throw error;
     }
   }
 
-  async updateUseCase(id: string, updates: UpdateUseCaseDTO): Promise<UseCase | null> {
+  async updateUseCase(id: string, updates: UpdateUseCaseDTO): Promise<UseCaseAttributes | null> {
     try {
       logTrace('UseCaseService: Updating use case');
       await useCaseRepository.update(id, updates);
@@ -54,7 +53,7 @@ export class UseCaseService {
         return null;
       }
       logTrace('UseCaseService: Use case updated successfully');
-      return updatedUseCase as UseCase;
+      return updatedUseCase;
     } catch (error) {
       logException(error as Error, { context: 'useCaseService.updateUseCase' });
       throw error;
@@ -64,8 +63,8 @@ export class UseCaseService {
   async deleteUseCase(id: string): Promise<boolean> {
     try {
       logTrace('UseCaseService: Deleting use case');
-      const deleted = await useCaseRepository.delete(id);
-      const success = deleted > 0;
+      await useCaseRepository.delete(id);
+      const success = true;
       logTrace(`UseCaseService: Use case deletion ${success ? 'successful' : 'failed'}`);
       return success;
     } catch (error) {

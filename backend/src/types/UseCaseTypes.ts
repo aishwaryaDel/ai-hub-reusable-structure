@@ -18,8 +18,6 @@ export interface UseCaseAttributes {
   application_url?: string;
 }
 
-import { Optional } from 'sequelize';
-export interface UseCaseCreationAttributes extends Optional<UseCaseAttributes, 'id' | 'created_at' | 'updated_at'> {}
 export interface CreateUseCaseDTO {
   title: string;
   short_description: string;
