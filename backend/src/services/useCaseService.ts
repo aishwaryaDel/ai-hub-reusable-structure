@@ -63,8 +63,8 @@ export class UseCaseService {
   async deleteUseCase(id: string): Promise<boolean> {
     try {
       logTrace('UseCaseService: Deleting use case');
-      await useCaseRepository.delete(id);
-      const success = true;
+      const deleted = await useCaseRepository.delete(id);
+      const success = deleted > 0;
       logTrace(`UseCaseService: Use case deletion ${success ? 'successful' : 'failed'}`);
       return success;
     } catch (error) {

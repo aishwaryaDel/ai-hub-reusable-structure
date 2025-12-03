@@ -2,12 +2,18 @@ import dotenv from 'dotenv';
 import app from './app';
 import { initializeAppInsights, logTrace, logEvent } from './utils/appInsights';
 import { swaggerUi, swaggerSpec } from './config/swagger';
+import { sequelize } from './config/database';
 
 dotenv.config();
 
-
 initializeAppInsights();
 logTrace('Server initialization started');
+
+sequelize.sync({ alter: false }).then(() => {
+  console.log('✅ Database models synchronized');
+}).catch((error) => {
+  console.error('❌ Database sync failed:', error);
+});
 
 // Swagger UI setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

@@ -1,66 +1,32 @@
-import { supabase } from '../config/supabase';
-import { CreateUseCaseDTO, UpdateUseCaseDTO, UseCaseAttributes } from '../types/UseCaseTypes';
+import { UseCase } from '../models/UseCase';
+import { CreateUseCaseDTO, UpdateUseCaseDTO } from '../types/UseCaseTypes';
 
 export class UseCaseRepository {
-  async findById(id: string): Promise<UseCaseAttributes | null> {
-    const { data, error } = await supabase
-      .from('use_cases')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle();
-
-    if (error) throw error;
-    return data;
+  async findById(id: string) {
+    return UseCase.findByPk(id);
   }
 
-  async create(useCaseData: CreateUseCaseDTO): Promise<UseCaseAttributes> {
+  async create(useCaseData: CreateUseCaseDTO) {
     const safeData = {
       ...useCaseData,
       related_use_case_ids: useCaseData.related_use_case_ids || [],
     };
-
-    const { data, error } = await supabase
-      .from('use_cases')
-      .insert(safeData)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
+    return UseCase.create(safeData);
   }
 
-  async update(id: string, updates: UpdateUseCaseDTO): Promise<UseCaseAttributes> {
-    const { data, error } = await supabase
-      .from('use_cases')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
+  async update(id: string, updates: UpdateUseCaseDTO) {
+    await UseCase.update(updates, { where: { id } });
+    return this.findById(id);
   }
 
-  async delete(id: string): Promise<void> {
-    const { error } = await supabase
-      .from('use_cases')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw error;
+  async delete(id: string) {
+    return UseCase.destroy({ where: { id } });
   }
 
-  async findAll(): Promise<UseCaseAttributes[]> {
-    const { data, error } = await supabase
-      .from('use_cases')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    return data || [];
+  async findAll() {
+    return UseCase.findAll({
+      order: [['created_at', 'DESC']],
+    });
   }
 }
 

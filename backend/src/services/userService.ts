@@ -70,8 +70,8 @@ export class UserService {
   async deleteUser(id: string): Promise<boolean> {
     try {
       logTrace('UserService: Deleting user');
-      await userRepository.delete(id);
-      const success = true;
+      const deleted = await userRepository.delete(id);
+      const success = deleted > 0;
       logTrace(`UserService: User deletion ${success ? 'successful' : 'failed'}`);
       return success;
     } catch (error) {
