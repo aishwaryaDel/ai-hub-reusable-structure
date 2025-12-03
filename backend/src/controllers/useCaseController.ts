@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { useCaseService } from '../services/useCaseService';
 import { validationService } from '../services/validationService';
 import { CreateUseCaseDTO, UpdateUseCaseDTO } from '../types/UseCaseTypes';
@@ -6,7 +6,7 @@ import { USE_CASE_MESSAGES } from '../constants/messages';
 import { logTrace, logEvent, logException } from '../utils/appInsights';
 
 export class UseCaseController {
-  async getAllUseCases(req: Request, res: Response): Promise<void> {
+  async getAllUseCases(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const useCases = await useCaseService.getAllUseCases();
        logEvent('GetAllUseCases', { count: useCases.length.toString() });
@@ -17,14 +17,11 @@ export class UseCaseController {
       });
     } catch (error) {
       logException(error as Error, { context: 'getAllUseCases' });
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : USE_CASE_MESSAGES.FETCH_ALL_ERROR,
-      });
+        next(error);
     }
   }
 
-  async getUseCaseById(req: Request, res: Response): Promise<void> {
+  async getUseCaseById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
 
@@ -54,14 +51,11 @@ export class UseCaseController {
       });
     } catch (error) {
       logException(error as Error, { context: 'getUseCaseById' });
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : USE_CASE_MESSAGES.FETCH_ERROR,
-      });
+        next(error);
     }
   }
 
-  async createUseCase(req: Request, res: Response): Promise<void> {
+  async createUseCase(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting createUseCase');
       const useCaseData: CreateUseCaseDTO = req.body;
@@ -86,14 +80,11 @@ export class UseCaseController {
       });
     } catch (error) {
       logException(error as Error, { context: 'createUseCase' });
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : USE_CASE_MESSAGES.CREATE_ERROR,
-      });
+        next(error);
     }
   }
 
-  async updateUseCase(req: Request, res: Response): Promise<void> {
+  async updateUseCase(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting updateUseCase');
       const { id } = req.params;

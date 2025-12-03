@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { userService } from '../services/userService';
 import { validationService } from '../services/validationService';
 import { CreateUserDTO, UpdateUserDTO } from '../types/UserTypes';
@@ -6,7 +6,7 @@ import { USER_MESSAGES } from '../constants/messages';
 import { logTrace, logEvent, logException } from '../utils/appInsights';
 
 export class UserController {
-  async getAllUsers(req: Request, res: Response): Promise<void> {
+  async getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting getAllUsers');
       const users = await userService.getAllUsers();
@@ -18,14 +18,11 @@ export class UserController {
       });
     } catch (error) {
       logException(error as Error, { context: 'getAllUsers' });
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : USER_MESSAGES.FETCH_ALL_ERROR,
-      });
+      next(error);
     }
   }
 
-  async getUserById(req: Request, res: Response): Promise<void> {
+  async getUserById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting getUserById');
       const { id } = req.params;
@@ -57,14 +54,11 @@ export class UserController {
       });
     } catch (error) {
       logException(error as Error, { context: 'getUserById' });
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : USER_MESSAGES.FETCH_ERROR,
-      });
+      next(error);
     }
   }
 
-  async createUser(req: Request, res: Response): Promise<void> {
+  async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting createUser');
       const userData: CreateUserDTO = req.body;
@@ -89,10 +83,7 @@ export class UserController {
       });
     } catch (error) {
       logException(error as Error, { context: 'createUser' });
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : USER_MESSAGES.CREATE_ERROR,
-      });
+      next(error);
     }
   }
 

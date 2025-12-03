@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { authService } from '../services/authService';
 import { LoginCredentials } from '../services/authService';
 import { validationService } from '../services/validationService';
 import { AUTH_MESSAGES } from '../constants/messages';
 import { logTrace, logEvent, logException } from '../utils/appInsights';
 
-export async function loginUser(req: Request, res: Response) {
+export async function loginUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password }: LoginCredentials = req.body;
 
@@ -35,10 +35,6 @@ export async function loginUser(req: Request, res: Response) {
     });
   } catch (err) {
     logException(err as Error, { context: 'loginUser' });
-    console.error('Login error:', err);
-    return res.status(500).json({
-      success: false,
-      error: AUTH_MESSAGES.LOGIN_ERROR
-    });
+    next(err);
   }
 }
