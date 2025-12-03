@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { useCaseController } from '../controllers/useCaseController';
+import { authenticateToken } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -122,7 +123,7 @@ router.get('/', (req, res) => useCaseController.getAllUseCases(req, res));
 *       201:
 *         description: Use case created
 */
-router.post('/', (req, res) => useCaseController.createUseCase(req, res));
+router.post('/', authenticateToken, (req, res) => useCaseController.createUseCase(req, res));
 
 /**
 * @openapi
@@ -166,7 +167,7 @@ router.get('/:id', (req, res) => useCaseController.getUseCaseById(req, res));
 *       404:
 *         description: Use case not found
 */
-router.put('/:id', (req, res) => useCaseController.updateUseCase(req, res));
+router.put('/:id', authenticateToken, (req, res) => useCaseController.updateUseCase(req, res));
 
 /**
 * @openapi
@@ -185,7 +186,7 @@ router.put('/:id', (req, res) => useCaseController.updateUseCase(req, res));
 *       404:
 *         description: Use case not found
 */
-router.delete('/:id', (req, res) => useCaseController.deleteUseCase(req, res));
+router.delete('/:id', authenticateToken, (req, res) => useCaseController.deleteUseCase(req, res));
 
 export default router;
 

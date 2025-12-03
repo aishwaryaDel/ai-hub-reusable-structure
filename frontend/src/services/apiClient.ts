@@ -20,9 +20,28 @@ export class ApiClient {
       },
     });
 
+    this.client.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem('auth_token');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+
     this.client.interceptors.response.use(
       (response) => response,
       (error: AxiosError<ApiResponse<unknown>>) => {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('auth_user');
+          window.location.href = '/';
+        }
+
         if (error.response?.data?.error) {
           throw new Error(error.response.data.error);
         } else if (error.response?.status) {

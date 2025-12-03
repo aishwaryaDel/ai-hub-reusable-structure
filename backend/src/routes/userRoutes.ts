@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { userController } from '../controllers/userController';
-
+import { authenticateToken } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -93,15 +93,15 @@ const router = Router();
 *       404:
 *         description: User not found **/
 
-router.get('/', (req, res) => userController.getAllUsers(req, res));
+router.get('/', authenticateToken, (req, res) => userController.getAllUsers(req, res));
 
-router.get('/:id', (req, res) => userController.getUserById(req, res));
+router.get('/:id', authenticateToken, (req, res) => userController.getUserById(req, res));
 
-router.post('/', (req, res) => userController.createUser(req, res));
+router.post('/', authenticateToken, (req, res) => userController.createUser(req, res));
 
-router.put('/:id', (req, res) => userController.updateUser(req, res));
+router.put('/:id', authenticateToken, (req, res) => userController.updateUser(req, res));
 
-router.delete('/:id', (req, res) => userController.deleteUser(req, res));
+router.delete('/:id', authenticateToken, (req, res) => userController.deleteUser(req, res));
 
 export default router;
 

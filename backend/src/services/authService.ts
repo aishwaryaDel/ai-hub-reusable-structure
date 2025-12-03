@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { logTrace, logException } from '../utils/appInsights';
 import { userRepository } from '../repository/userRepository';
+import { jwtService } from './jwtService';
 
 const SALT_ROUNDS = 10;
 
@@ -16,6 +17,7 @@ export interface AuthResponse {
     name: string;
     role: string;
   };
+  token: string;
 }
 
 export class AuthService {
@@ -35,6 +37,9 @@ export class AuthService {
         return null;
       }
       logTrace('AuthService: Login successful');
+
+      const token = jwtService.generateToken(user);
+
       return {
         user: {
           id: user.id,
@@ -42,6 +47,7 @@ export class AuthService {
           name: user.name,
           role: user.role,
         },
+        token,
       };
     } catch (error) {
       logException(error as Error, { context: 'authService.login' });
