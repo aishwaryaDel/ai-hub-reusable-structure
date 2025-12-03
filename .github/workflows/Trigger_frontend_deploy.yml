@@ -1,0 +1,34 @@
+name: Frontend Docker Pipeline Trigger
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+    paths-ignore:
+      - 'backend/**'
+  workflow_dispatch:
+
+jobs:
+
+  # ---------------------- SETUP ----------------------
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Environment Details
+        run: |
+          echo "🚀 Frontend Docker Build & Push Workflow"
+          echo "Branch: ${{ github.ref }}"
+          echo "Target Environment: dev"
+
+  # ---------------------- DEV ----------------------
+  build-and-push-dev:
+    name: Dev
+    needs: setup
+    uses: aishwaryaDel/tesa-app-deploy/.github/workflows/Frontend_docker_deploy.yml@main
+    with:
+      environment: "dev"
+      image_name: "ui-dev"
+      app_info: ${{ vars.APP_INFO_DEV }}  # App info from GitHub variable
+    secrets:
+      azure_creds: ${{ secrets.AZURE_CREDENTIALS_DEV }}
