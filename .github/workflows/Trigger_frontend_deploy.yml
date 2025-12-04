@@ -33,3 +33,4 @@ jobs:
       app_info: ${{ vars.APP_INFO_DEV }}  # App info from GitHub variable
     secrets:
       azure_creds: ${{ secrets.AZURE_CREDENTIALS_DEV }}
+      docker_env: ${{ secrets.DOCKER_ENV_DEV }}

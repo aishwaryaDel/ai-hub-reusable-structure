@@ -16,6 +16,10 @@ COPY . .
 # Run Test cases
 RUN npm run test --if-present
 
+# Accept VITE_ build args and inject them into .env
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
 # Production Build erzeugen (Vite legt Output in /app/dist)
 RUN npm run build
 
