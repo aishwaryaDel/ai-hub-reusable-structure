@@ -1,41 +1,41 @@
-# Stage 1: Build der React/Vite App
+# Stage 1: Build the React/Vite App
 FROM node:20-alpine AS build
 
-# Arbeitsverzeichnis im Container
+# Working directory in the container
 WORKDIR /app
 
-# package.json und lockfiles zuerst kopieren (Caching für npm install)
+# Copy package.json and lockfiles first (caching for npm install)
 COPY package*.json ./
 
-# Dependencies installieren
+# Install dependencies
 RUN npm install
 
-# Restlichen Code kopieren
+# Copy the rest of the code
 COPY . .
 
-# Run Test cases
+# Run test cases
 RUN npm run test --if-present
 
 # Accept VITE_ build args and inject them into .env
 ARG VITE_API_BASE_URL
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
-# Production Build erzeugen (Vite legt Output in /app/dist)
+# Create production build (Vite outputs to /app/dist)
 RUN npm run build
 
-# Stage 2: Auslieferung über nginx (statischer Webserver)
+# Stage 2: Serve via nginx (static web server)
 FROM nginx:alpine AS runtime
 
-# Wir löschen die default nginx Website-Konfiguration und legen unsere rein
-# (Standardmäßig lauscht nginx auf Port 80)
+# Remove default nginx website config and add our own
+# (By default, nginx listens on port 80)
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Jetzt kopieren wir die fertigen Build-Assets aus Stage 1 nach /usr/share/nginx/html
+# Copy built assets from Stage 1 to /usr/share/nginx/html
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose Port 80 für Azure Container Apps / Ingress
+# Expose port 80 for Azure Container Apps / Ingress
 EXPOSE 80
 
-# nginx im Vordergrund laufen lassen
+# Run nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,49 +1,49 @@
 # 1. BUILD STAGE
-# Diese Stage kompiliert TypeScript zu JavaScript
+# This stage compiles TypeScript to JavaScript
 FROM node:20-alpine AS build
 
-# Arbeitsverzeichnis im Container
+# Working directory in the container
 WORKDIR /app
 
-# package.json + tsconfig.json kopieren (reicht für npm install)
+# Copy package.json + tsconfig.json (sufficient for npm install)
 COPY package.json ./
 COPY tsconfig.json ./
 COPY jest.config.js ./
 
-# Dependencies installieren (inkl. Dev-Dependencies, weil wir hier noch builden müssen)
+# Install dependencies (including dev-dependencies, since we still need to build here)
 RUN npm install
 
-# Restlichen Code reinkopieren
+# Copy the rest of the code
 COPY src ./src
 COPY migrations ./migrations
 COPY .env ./.env
 
-# Run testcases
+# Run test cases
 RUN npm run test
 # COPY db ./db
 
-# TypeScript nach dist/ bauen
+# Build TypeScript to dist/
 RUN npm run build
 
 
 # 2. RUNTIME STAGE
-# Diese Stage enthält NUR das, was wir wirklich zur Laufzeit brauchen
+# This stage contains ONLY what is needed at runtime
 FROM node:20-alpine AS runtime
 
 WORKDIR /app
 
-# package.json kopieren
+# Copy package.json
 COPY package.json ./
 
-# Nur Produktions-Dependencies installieren (kein TypeScript mehr, kein ts-node-dev)
+# Install only production dependencies (no TypeScript, no ts-node-dev)
 RUN npm install --omit=dev
 
-# Den gebauten Code aus der ersten Stage übernehmen
+# Copy built code from the first stage
 COPY --from=build /app/dist ./dist
 
-# Port, auf dem der Server laufen wird
+# Port on which the server will run
 ENV PORT=3001
 EXPOSE 3001
 
-# Startkommando für die API
+# Start command for the API
 CMD ["node", "dist/src/server.js"]
