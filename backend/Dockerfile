@@ -46,4 +46,4 @@ ENV PORT=3001
 EXPOSE 3001
 
 # Start command for the API
-CMD ["node", "dist/src/server.js"]
+CMD ["node", "dist/src/server.js"] 
