@@ -1,18 +1,18 @@
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { UserAttributes } from '../types/UserTypes';
 import dotenv from 'dotenv';
 dotenv.config();
 
-
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
-
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET is not defined in environment variables');
+function getRequiredEnvVar(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`${name} is not defined in environment variables`);
+  }
+  return value;
 }
-if (!JWT_EXPIRES_IN) {
-  throw new Error('JWT_EXPIRES_IN is not defined in environment variables');
-}
+
+const JWT_SECRET = getRequiredEnvVar('JWT_SECRET');
+const JWT_EXPIRES_IN = getRequiredEnvVar('JWT_EXPIRES_IN');
 
 export interface JwtPayload {
   userId: string;
@@ -28,7 +28,7 @@ export class JwtService {
       role: user.role,
     };
 
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN as any });
   }
 
   verifyToken(token: string): JwtPayload {

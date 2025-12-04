@@ -106,7 +106,7 @@ const router = Router();
 *       200:
 *         description: List of use cases
 */
-router.get('/', (req, res) => useCaseController.getAllUseCases(req, res));
+router.get('/', (req, res, next) => useCaseController.getAllUseCases(req, res, next));
 
 /**
 * @openapi
@@ -123,7 +123,7 @@ router.get('/', (req, res) => useCaseController.getAllUseCases(req, res));
 *       201:
 *         description: Use case created
 */
-router.post('/', authenticateToken, (req, res) => useCaseController.createUseCase(req, res));
+router.post('/', authenticateToken, (req, res, next) => useCaseController.createUseCase(req, res, next));
 
 /**
 * @openapi
@@ -142,7 +142,7 @@ router.post('/', authenticateToken, (req, res) => useCaseController.createUseCas
 *       404:
 *         description: Use case not found
 */
-router.get('/:id', (req, res) => useCaseController.getUseCaseById(req, res));
+router.get('/:id', (req, res, next) => useCaseController.getUseCaseById(req, res, next));
 
 /**
 * @openapi
@@ -167,7 +167,7 @@ router.get('/:id', (req, res) => useCaseController.getUseCaseById(req, res));
 *       404:
 *         description: Use case not found
 */
-router.put('/:id', authenticateToken, (req, res) => useCaseController.updateUseCase(req, res));
+router.put('/:id', authenticateToken, (req, res, next) => useCaseController.updateUseCase(req, res, next));
 
 /**
 * @openapi
@@ -186,7 +186,7 @@ router.put('/:id', authenticateToken, (req, res) => useCaseController.updateUseC
 *       404:
 *         description: Use case not found
 */
-router.delete('/:id', authenticateToken, (req, res) => useCaseController.deleteUseCase(req, res));
+router.delete('/:id', authenticateToken, (req, res, next) => useCaseController.deleteUseCase(req, res));
 
 export default router;
 

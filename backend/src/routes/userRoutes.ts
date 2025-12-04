@@ -93,15 +93,15 @@ const router = Router();
 *       404:
 *         description: User not found **/
 
-router.get('/', authenticateToken, (req, res) => userController.getAllUsers(req, res));
+router.get('/', authenticateToken, (req, res, next) => userController.getAllUsers(req, res, next));
 
-router.get('/:id', authenticateToken, (req, res) => userController.getUserById(req, res));
+router.get('/:id', authenticateToken, (req, res, next) => userController.getUserById(req, res, next));
 
-router.post('/', authenticateToken, (req, res) => userController.createUser(req, res));
+router.post('/', authenticateToken, (req, res, next) => userController.createUser(req, res, next));
 
-router.put('/:id', authenticateToken, (req, res) => userController.updateUser(req, res));
+router.put('/:id', authenticateToken, (req, res, next) => userController.updateUser(req, res));
 
-router.delete('/:id', authenticateToken, (req, res) => userController.deleteUser(req, res));
+router.delete('/:id', authenticateToken, (req, res, next) => userController.deleteUser(req, res));
 
 export default router;
 
