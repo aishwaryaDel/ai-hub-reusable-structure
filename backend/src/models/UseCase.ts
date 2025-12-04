@@ -3,8 +3,6 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../repository/sequelize';
 import { CreateUseCaseDTO, UpdateUseCaseDTO, UseCaseAttributes, UseCaseCreationAttributes } from '../types/UseCaseTypes';
 
-export { CreateUseCaseDTO, UpdateUseCaseDTO, UseCaseAttributes, UseCaseCreationAttributes };
-
 export class UseCase extends Model<UseCaseAttributes, UseCaseCreationAttributes> implements UseCaseAttributes {
   public id!: string;
   public title!: string;
