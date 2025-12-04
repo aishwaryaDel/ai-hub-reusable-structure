@@ -2,7 +2,14 @@ import { CreateUseCaseDTO, UpdateUseCaseDTO, UseCaseAttributes } from '../types/
 import { logTrace, logException } from '../utils/appInsights';
 import { useCaseRepository } from '../repository/useCaseRepository';
 
+/**
+ * Service layer for use case business logic
+ * Abstracts repository operations and adds logging/error handling
+ */
 export class UseCaseService {
+  /**
+   * Fetches all use cases from the repository
+   */
   async getAllUseCases(): Promise<UseCaseAttributes[]> {
     try {
       logTrace('UseCaseService: Fetching all use cases');
@@ -15,6 +22,9 @@ export class UseCaseService {
     }
   }
 
+  /**
+   * Fetches a single use case by its unique ID
+   */
   async getUseCaseById(id: string): Promise<UseCaseAttributes | null> {
     try {
       logTrace('UseCaseService: Fetching use case by ID');
@@ -31,6 +41,9 @@ export class UseCaseService {
     }
   }
 
+  /**
+   * Creates a new use case in the database
+   */
   async createUseCase(useCaseData: CreateUseCaseDTO): Promise<UseCaseAttributes> {
     try {
       logTrace('UseCaseService: Creating new use case');
@@ -43,6 +56,9 @@ export class UseCaseService {
     }
   }
 
+  /**
+   * Updates a use case and returns the updated entity
+   */
   async updateUseCase(id: string, updates: UpdateUseCaseDTO): Promise<UseCaseAttributes | null> {
     try {
       logTrace('UseCaseService: Updating use case');
@@ -60,6 +76,9 @@ export class UseCaseService {
     }
   }
 
+  /**
+   * Deletes a use case by ID and returns success status
+   */
   async deleteUseCase(id: string): Promise<boolean> {
     try {
       logTrace('UseCaseService: Deleting use case');

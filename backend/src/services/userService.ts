@@ -3,7 +3,14 @@ import { authService } from './authService';
 import { logTrace, logException } from '../utils/appInsights';
 import { userRepository } from '../repository/userRepository';
 
+/**
+ * Service layer for user business logic
+ * Handles password hashing and coordinates with repository layer
+ */
 export class UserService {
+  /**
+   * Fetches all users from the repository
+   */
   async getAllUsers(): Promise<UserAttributes[]> {
     try {
       logTrace('UserService: Fetching all users');
@@ -16,6 +23,9 @@ export class UserService {
     }
   }
 
+  /**
+   * Fetches a single user by their unique ID
+   */
   async getUserById(id: string): Promise<UserAttributes | null> {
     try {
       logTrace('UserService: Fetching user by ID');
@@ -32,6 +42,9 @@ export class UserService {
     }
   }
 
+  /**
+   * Creates a new user with bcrypt-hashed password
+   */
   async createUser(userData: CreateUserDTO): Promise<UserAttributes> {
     try {
       logTrace('UserService: Creating new user');
@@ -46,6 +59,10 @@ export class UserService {
     }
   }
 
+  /**
+   * Updates user information
+   * If password is being updated, it gets hashed before saving
+   */
   async updateUser(id: string, updates: UpdateUserDTO): Promise<UserAttributes | null> {
     try {
       logTrace('UserService: Updating user');
@@ -67,6 +84,9 @@ export class UserService {
     }
   }
 
+  /**
+   * Deletes a user by ID and returns success status
+   */
   async deleteUser(id: string): Promise<boolean> {
     try {
       logTrace('UserService: Deleting user');

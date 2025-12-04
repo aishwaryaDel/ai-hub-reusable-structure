@@ -3,6 +3,10 @@ import { UserAttributes } from '../types/UserTypes';
 import dotenv from 'dotenv';
 dotenv.config();
 
+/**
+ * Helper function to get required environment variables
+ * Throws error if environment variable is not set
+ */
 function getRequiredEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -20,7 +24,15 @@ export interface JwtPayload {
   role: string;
 }
 
+/**
+ * Service responsible for JWT token operations
+ * Handles token generation, verification, and decoding
+ */
 export class JwtService {
+  /**
+   * Generates a signed JWT token for authenticated user
+   * Token includes user ID, email, and role as payload
+   */
   generateToken(user: UserAttributes): string {
     const payload: JwtPayload = {
       userId: user.id,
@@ -31,6 +43,10 @@ export class JwtService {
     return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN as any });
   }
 
+  /**
+   * Verifies JWT token signature and expiration
+   * Throws error if token is invalid or expired
+   */
   verifyToken(token: string): JwtPayload {
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
@@ -40,6 +56,10 @@ export class JwtService {
     }
   }
 
+  /**
+   * Decodes JWT token without verification
+   * Returns null if decoding fails
+   */
   decodeToken(token: string): JwtPayload | null {
     try {
       const decoded = jwt.decode(token) as JwtPayload;

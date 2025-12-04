@@ -5,7 +5,15 @@ import { CreateUseCaseDTO, UpdateUseCaseDTO } from '../types/UseCaseTypes';
 import { USE_CASE_MESSAGES } from '../constants/messages';
 import { logTrace, logEvent, logException } from '../utils/appInsights';
 
+/**
+ * Controller responsible for handling all use case-related HTTP requests
+ * Coordinates between validation, service layer, and response formatting
+ */
 export class UseCaseController {
+  /**
+   * Retrieves all use cases from the database
+   * Public endpoint - no authentication required
+   */
   async getAllUseCases(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const useCases = await useCaseService.getAllUseCases();
@@ -21,6 +29,9 @@ export class UseCaseController {
     }
   }
 
+  /**
+   * Retrieves a specific use case by its ID
+   */
   async getUseCaseById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
@@ -55,6 +66,10 @@ export class UseCaseController {
     }
   }
 
+  /**
+   * Creates a new use case with validation
+   * Requires authentication via JWT token
+   */
   async createUseCase(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting createUseCase');
@@ -84,6 +99,10 @@ export class UseCaseController {
     }
   }
 
+  /**
+   * Updates an existing use case
+   * Requires authentication via JWT token
+   */
   async updateUseCase(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting updateUseCase');
@@ -144,6 +163,10 @@ export class UseCaseController {
     }
   }
 
+  /**
+   * Deletes a use case by ID
+   * Requires authentication via JWT token
+   */
   async deleteUseCase(req: Request, res: Response): Promise<void> {
     try {
       logTrace('Starting deleteUseCase');

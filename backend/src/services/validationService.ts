@@ -5,12 +5,22 @@ import { CreateUserDTO, UpdateUserDTO } from '../types/UserTypes';
 const VALID_STATUSES = ['Ideation', 'Pre-Evaluation', 'Evaluation', 'PoC', 'MVP', 'Live', 'Archived'];
 const VALID_DEPARTMENTS = ['Marketing', 'R&D', 'Procurement', 'IT', 'HR', 'Operations'];
 
+/**
+ * Service responsible for input validation across the application
+ * Returns null if validation passes, error message string if validation fails
+ */
 export class ValidationService {
+  /**
+   * Validates email format using regex
+   */
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
+  /**
+   * Validates all required fields for creating a new use case
+   */
   validateUseCaseData(data: CreateUseCaseDTO): string | null {
     if (!data.title || data.title.trim().length === 0) {
       return VALIDATION_MESSAGES.TITLE_REQUIRED;
@@ -55,6 +65,10 @@ export class ValidationService {
     return null;
   }
 
+  /**
+   * Validates fields for updating an existing use case
+   * Only validates provided fields, allows partial updates
+   */
   validateUseCaseUpdateData(data: UpdateUseCaseDTO): string | null {
     if (data.status && !VALID_STATUSES.includes(data.status)) {
       return `${VALIDATION_MESSAGES.INVALID_STATUS} ${VALID_STATUSES.join(', ')}`;
@@ -83,6 +97,9 @@ export class ValidationService {
     return null;
   }
 
+  /**
+   * Validates all required fields for creating a new user
+   */
   validateUserData(data: CreateUserDTO): string | null {
     if (!data.email || !this.isValidEmail(data.email)) {
       return VALIDATION_MESSAGES.EMAIL_REQUIRED;
@@ -103,6 +120,9 @@ export class ValidationService {
     return null;
   }
 
+  /**
+   * Validates fields for updating an existing user
+   */
   validateUserUpdateData(data: UpdateUserDTO): string | null {
     if (data.email && !this.isValidEmail(data.email)) {
       return VALIDATION_MESSAGES.INVALID_EMAIL;
@@ -119,6 +139,9 @@ export class ValidationService {
     return null;
   }
 
+  /**
+   * Validates that both email and password are provided for login
+   */
   validateLoginCredentials(email: string, password: string): string | null {
     if (!email || !password) {
       return 'Email and password are required';

@@ -5,7 +5,14 @@ import { CreateUserDTO, UpdateUserDTO } from '../types/UserTypes';
 import { USER_MESSAGES } from '../constants/messages';
 import { logTrace, logEvent, logException } from '../utils/appInsights';
 
+/**
+ * Controller responsible for handling all user-related HTTP requests
+ * All endpoints require authentication via JWT token
+ */
 export class UserController {
+  /**
+   * Retrieves all users from the database
+   */
   async getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting getAllUsers');
@@ -22,6 +29,9 @@ export class UserController {
     }
   }
 
+  /**
+   * Retrieves a specific user by their ID
+   */
   async getUserById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting getUserById');
@@ -58,6 +68,9 @@ export class UserController {
     }
   }
 
+  /**
+   * Creates a new user with validation and password hashing
+   */
   async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       logTrace('Starting createUser');
@@ -87,6 +100,9 @@ export class UserController {
     }
   }
 
+  /**
+   * Updates an existing user's information
+   */
   async updateUser(req: Request, res: Response): Promise<void> {
     try {
       logTrace('Starting updateUser');
@@ -147,6 +163,9 @@ export class UserController {
     }
   }
 
+  /**
+   * Deletes a user by ID
+   */
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       logTrace('Starting deleteUser');

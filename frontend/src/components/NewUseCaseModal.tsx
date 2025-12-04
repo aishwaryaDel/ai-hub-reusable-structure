@@ -9,6 +9,7 @@ interface NewUseCaseModalProps {
   onSubmit: (data: NewUseCaseData, useCaseId?: string) => void;
   existingUseCase?: UseCase | null;
 }
+
 export interface NewUseCaseData {
   title: string;
   short_description: string;
@@ -29,12 +30,22 @@ export interface NewUseCaseData {
   };
 }
 
+/**
+ * Multi-step modal for creating or updating use cases
+ * Supports both create and update modes based on existingUseCase prop
+ * Enforces status progression rules (can only advance status, not regress)
+ * Divided into 4 steps: Basic Info, Classification, Contact Info, Additional Info
+ */
 export default function NewUseCaseModal({ onClose, onSubmit, existingUseCase = null }: NewUseCaseModalProps) {
   const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
   const isUpdateMode = !!existingUseCase;
 
+  /**
+   * Enforces status progression: new use cases start at Ideation,
+   * updates can only move forward in the status sequence
+   */
   const getAvailableStatuses = (): UseCaseStatus[] => {
     if (!isUpdateMode) {
       return ['Ideation'];

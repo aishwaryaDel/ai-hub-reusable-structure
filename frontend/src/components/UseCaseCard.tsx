@@ -6,6 +6,11 @@ interface UseCaseCardProps {
   onClick: () => void;
 }
 
+/**
+ * Card component displaying use case summary
+ * Shows department image, status badge, title, and short description
+ * Includes hover effects and keyboard accessibility
+ */
 export default function UseCaseCard({ useCase, onClick }: UseCaseCardProps) {
   const departmentImage = DEFAULT_IMAGES[useCase.department as Department];
   const statusColor = STATUS_COLORS[useCase.status as UseCaseStatus] || 'bg-gray-500';

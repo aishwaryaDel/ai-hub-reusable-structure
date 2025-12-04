@@ -23,6 +23,15 @@ interface UseCaseOverviewProps {
 const departments: Array<'All' | Department> = ['All', ...DEPARTMENTS];
 const statuses: Array<'All' | UseCaseStatus> = ['All', ...STATUS_SEQUENCE];
 
+/**
+ * Main use case overview page with filtering and CRUD operations
+ * Features:
+ * - Search by title, description, and tags
+ * - Filter by department and status
+ * - View use case details in modal
+ * - Create/update/delete use cases (admin only)
+ * - Displays filtered results count
+ */
 export default function UseCaseOverview({ useCases, onBackToHome, isLoading = false, error = null, onRefresh }: UseCaseOverviewProps) {
   const { t } = useLanguage();
   const { isAdmin } = useAuth();
@@ -33,6 +42,10 @@ export default function UseCaseOverview({ useCases, onBackToHome, isLoading = fa
   const [showNewUseCaseModal, setShowNewUseCaseModal] = useState(false);
   const [useCaseToUpdate, setUseCaseToUpdate] = useState<UseCase | null>(null);
 
+  /**
+   * Filters use cases based on search query, department, and status
+   * Uses memoization for performance optimization
+   */
   const filteredUseCases = useMemo(() => {
     return useCases.filter((useCase) => {
       const matchesSearch =

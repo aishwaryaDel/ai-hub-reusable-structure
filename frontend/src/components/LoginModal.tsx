@@ -9,6 +9,12 @@ interface LoginModalProps {
   onClose: () => void;
   onLoginSuccess: (token: string, user: User) => void;
 }
+
+/**
+ * Modal component for user authentication
+ * Handles email/password login with JWT token retrieval
+ * Includes password visibility toggle and error handling
+ */
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginModalProps) {
   const { t } = useLanguage();
   const [email, setEmail] = useState('');

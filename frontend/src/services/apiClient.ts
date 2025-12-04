@@ -9,6 +9,12 @@ interface ApiResponse<T> {
   count?: number;
 }
 
+/**
+ * Centralized API client for all HTTP requests
+ * Handles JWT token injection via request interceptor
+ * Handles 401/403 errors via response interceptor (auto-logout)
+ * Provides typed methods for GET, POST, PUT, DELETE
+ */
 export class ApiClient {
   private client: AxiosInstance;
 
@@ -20,6 +26,9 @@ export class ApiClient {
       },
     });
 
+    /**
+     * Request interceptor: Automatically attaches JWT token to all requests
+     */
     this.client.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem('auth_token');
@@ -33,6 +42,10 @@ export class ApiClient {
       }
     );
 
+    /**
+     * Response interceptor: Handles authentication errors and auto-logout
+     * Clears auth data and redirects to home on 401/403
+     */
     this.client.interceptors.response.use(
       (response) => response,
       (error: AxiosError<ApiResponse<unknown>>) => {

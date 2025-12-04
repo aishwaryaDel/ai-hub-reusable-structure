@@ -6,6 +6,11 @@ export interface AuthRequest extends Request {
   user?: JwtPayload;
 }
 
+/**
+ * Middleware that enforces JWT authentication
+ * Extracts and validates Bearer token from Authorization header
+ * Returns 401 if missing token, 403 if invalid/expired token
+ */
 export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers['authorization'];
@@ -42,6 +47,10 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
   }
 };
 
+/**
+ * Middleware that attempts authentication but doesn't block if token is missing
+ * Attaches user info to request if valid token is provided
+ */
 export const optionalAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers['authorization'];

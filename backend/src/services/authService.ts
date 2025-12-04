@@ -20,7 +20,16 @@ export interface AuthResponse {
   token: string;
 }
 
+/**
+ * Service responsible for authentication logic
+ * Handles user login, password verification, and JWT token generation
+ */
 export class AuthService {
+  /**
+   * Authenticates a user with email and password
+   * Returns user info and JWT token on success, null on failure
+   * Supports both plaintext (for testing) and bcrypt-hashed passwords
+   */
   async login(credentials: LoginCredentials): Promise<AuthResponse | null> {
     try {
       logTrace('AuthService: Starting login');
@@ -55,6 +64,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * Hashes a password using bcrypt with configured salt rounds
+   */
   async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, SALT_ROUNDS);
   }

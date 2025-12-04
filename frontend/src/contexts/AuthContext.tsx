@@ -24,6 +24,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
 
+/**
+ * Authentication provider that manages user session state
+ * Persists authentication data to localStorage for session continuity
+ * Provides role-based access control helpers
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem(USER_KEY);
@@ -33,6 +38,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return localStorage.getItem(TOKEN_KEY);
   });
 
+  /**
+   * Syncs authentication state with localStorage
+   * Ensures persistence across page refreshes
+   */
   useEffect(() => {
     if (token && user) {
       localStorage.setItem(TOKEN_KEY, token);
@@ -66,6 +75,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Hook to access authentication context
+ * Must be used within AuthProvider
+ */
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

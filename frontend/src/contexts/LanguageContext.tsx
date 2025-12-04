@@ -6,6 +6,11 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
 }
+
+/**
+ * Translation mappings for English and German languages
+ * Contains all UI text strings used throughout the application
+ */
 const translations: Record<Language, Record<string, string>> = {
   en: {
     'landing.title': 'Welcome to the Tesa AI Hub',
@@ -205,9 +210,17 @@ const translations: Record<Language, Record<string, string>> = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+/**
+ * Language provider for internationalization (i18n)
+ * Manages current language and provides translation function
+ */
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>(DEFAULT_LANGUAGE);
 
+  /**
+   * Translation function that returns localized string for given key
+   * Falls back to key itself if translation not found
+   */
   const t = (key: string): string => {
     return translations[language][key] || key;
   };
@@ -219,6 +232,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Hook to access language context
+ * Must be used within LanguageProvider
+ */
 export function useLanguage() {
   const context = useContext(LanguageContext);
   if (context === undefined) {

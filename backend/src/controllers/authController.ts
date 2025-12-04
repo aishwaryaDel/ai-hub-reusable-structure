@@ -5,6 +5,10 @@ import { validationService } from '../services/validationService';
 import { AUTH_MESSAGES } from '../constants/messages';
 import { logTrace, logEvent, logException } from '../utils/appInsights';
 
+/**
+ * Handles user authentication and JWT token generation
+ * Validates credentials, authenticates user, and returns JWT token on success
+ */
 export async function loginUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password }: LoginCredentials = req.body;
