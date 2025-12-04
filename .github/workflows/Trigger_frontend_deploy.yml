@@ -20,7 +20,6 @@ jobs:
         run: |
           echo "🚀 Frontend Docker Build & Push Workflow"
           echo "Branch: ${{ github.ref }}"
-          echo "Target Environment: dev"
 
   # ---------------------- DEV ----------------------
   build-and-push-dev:
