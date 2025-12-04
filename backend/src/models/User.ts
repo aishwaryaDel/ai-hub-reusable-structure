@@ -2,6 +2,8 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../repository/sequelize';
 import { CreateUserDTO, UpdateUserDTO, UserAttributes, UserCreationAttributes } from '../types/UserTypes';
 
+export { CreateUserDTO, UpdateUserDTO, UserAttributes, UserCreationAttributes };
+
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public email!: string;

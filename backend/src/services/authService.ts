@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { logTrace, logException } from '../utils/appInsights';
 import { userRepository } from '../repository/userRepository';
+import { signToken } from '../utils/jwt';
 
 const SALT_ROUNDS = 10;
 
@@ -16,6 +17,7 @@ export interface AuthResponse {
     name: string;
     role: string;
   };
+  token: string;
 }
 
 export class AuthService {
@@ -34,6 +36,12 @@ export class AuthService {
         logTrace('AuthService: Invalid password');
         return null;
       }
+      const token = signToken({
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      });
+
       logTrace('AuthService: Login successful');
       return {
         user: {
@@ -42,6 +50,7 @@ export class AuthService {
           name: user.name,
           role: user.role,
         },
+        token,
       };
     } catch (error) {
       logException(error as Error, { context: 'authService.login' });
