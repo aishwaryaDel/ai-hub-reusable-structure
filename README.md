@@ -159,7 +159,6 @@ npm run build
 ## User Roles
 
 - **Admin**: Full access to all features
-- **Member**: Can create and manage own use cases
 - **Viewer**: Read-only access
 
 ## License

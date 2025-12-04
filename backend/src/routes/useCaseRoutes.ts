@@ -106,7 +106,7 @@ const router = Router();
 *       200:
 *         description: List of use cases
 */
-router.get('/', (req, res, next) => useCaseController.getAllUseCases(req, res, next));
+router.get('/', authenticateToken,(req, res, next) => useCaseController.getAllUseCases(req, res, next));
 
 /**
 * @openapi
@@ -142,7 +142,7 @@ router.post('/', authenticateToken, (req, res, next) => useCaseController.create
 *       404:
 *         description: Use case not found
 */
-router.get('/:id', (req, res, next) => useCaseController.getUseCaseById(req, res, next));
+router.get('/:id', authenticateToken,(req, res, next) => useCaseController.getUseCaseById(req, res, next));
 
 /**
 * @openapi

@@ -29,6 +29,16 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for AIHub Bolt backend',
     },
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [{ BearerAuth: [] }],
   },
   apis,
 };
