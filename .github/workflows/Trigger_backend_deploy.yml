@@ -1,9 +1,10 @@
-name: Backend Docker Pipeline Trigger
+name: Backend Deployment Trigger
 
 on:
   push:
     branches:
       - dev
+      - prod
       - main
     paths:
       - 'backend/**'
@@ -25,7 +26,7 @@ jobs:
   build-and-push-dev:
     name: Dev
     needs: setup
-    uses: aishwaryaDel/tesa-app-deploy/.github/workflows/Backend_docker_deploy.yml@main
+    uses: Central-DIT/tesa-app-deploy/.github/workflows/Backend_docker_deploy.yml@main
     with:
       environment: "dev"
       image_name: "api-dev"
