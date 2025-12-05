@@ -39,6 +39,9 @@ export async function loginUser(req: Request, res: Response, next: NextFunction)
     });
   } catch (err) {
     logException(err as Error, { context: 'loginUser' });
-    next(err);
+    return res.status(500).json({
+      success: false,
+      error: AUTH_MESSAGES.LOGIN_ERROR
+    });
   }
 }
